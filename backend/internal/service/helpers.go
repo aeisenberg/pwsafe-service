@@ -29,13 +29,21 @@ func validatePathWithinBase(path, base string) (string, error) {
 			return "", fmt.Errorf("invalid path: %w", err)
 		}
 	}
+	absPath, err = filepath.Abs(absPath)
+	if err != nil {
+		return "", fmt.Errorf("invalid path: %w", err)
+	}
 
 	absBase, err := filepath.EvalSymlinks(base)
 	if err != nil {
-		absBase, err = filepath.Abs(base)
+		absBase, err = resolveWithExistingAncestor(base)
 		if err != nil {
 			return "", fmt.Errorf("invalid base directory: %w", err)
 		}
+	}
+	absBase, err = filepath.Abs(absBase)
+	if err != nil {
+		return "", fmt.Errorf("invalid base directory: %w", err)
 	}
 
 	absPath = filepath.Clean(absPath)

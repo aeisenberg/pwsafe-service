@@ -247,3 +247,24 @@ func TestGetMaxSafeFileSize_CustomValue(t *testing.T) {
 		t.Errorf("expected %d, got %d", 5*1024*1024, got)
 	}
 }
+
+func TestLoad_ResolvesRelativeDirectories(t *testing.T) {
+	root := t.TempDir()
+	t.Chdir(root)
+	t.Setenv("PWSAFE_CONFIG_DIR", filepath.Join("dev", "config"))
+	t.Setenv("PWSAFE_DATA_DIR", filepath.Join("dev", "data"))
+	t.Setenv("PWSAFE_STATIC_DIR", filepath.Join("frontend", "dist"))
+	t.Setenv("PWSAFE_PORT", "")
+
+	cfg := Load()
+
+	for name, path := range map[string]string{
+		"config": cfg.ConfigDirectory,
+		"data":   cfg.DataDirectory,
+		"static": cfg.StaticDir,
+	} {
+		if !filepath.IsAbs(path) {
+			t.Errorf("expected absolute %s directory, got %q", name, path)
+		}
+	}
+}

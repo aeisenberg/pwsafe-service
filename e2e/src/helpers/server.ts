@@ -1,7 +1,7 @@
 import { spawn, ChildProcess } from "node:child_process";
 import { mkdtemp, cp, mkdir, writeFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join, resolve } from "node:path";
+import { join, relative, resolve } from "node:path";
 
 const PROJECT_ROOT = resolve(import.meta.dirname, "..", "..", "..");
 const BACKEND_DIR = join(PROJECT_ROOT, "backend");
@@ -21,6 +21,7 @@ export interface ServerOptions {
   sessionTimeout?: string; // e.g., "2s", "3m"
   skipAuthSetup?: boolean; // skip auto-setup (for auth-setup tests)
   trustedProxies?: string[]; // IPs allowed to set proxy headers
+  relativePaths?: boolean; // pass config, data, and static directories relative to backend/
   rateLimiter?: {
     standard?: RateLimitTierOptions;
     strict?: RateLimitTierOptions;
@@ -61,6 +62,9 @@ export class ServerInstance {
     await cp(FRONTEND_DIST, staticDir, { recursive: true });
 
     const binaryPath = join(BACKEND_DIR, BINARY_NAME);
+    const envConfigDir = this.options.relativePaths ? relative(BACKEND_DIR, configDir) : configDir;
+    const envDataDir = this.options.relativePaths ? relative(BACKEND_DIR, dataDir) : dataDir;
+    const envStaticDir = this.options.relativePaths ? relative(BACKEND_DIR, staticDir) : staticDir;
 
     // Find a free port before starting so we can set baseUrl in settings
     const port = await this.findFreePort();
@@ -92,9 +96,9 @@ export class ServerInstance {
       cwd: BACKEND_DIR,
       env: {
         ...process.env,
-        PWSAFE_CONFIG_DIR: configDir,
-        PWSAFE_DATA_DIR: dataDir,
-        PWSAFE_STATIC_DIR: staticDir,
+        PWSAFE_CONFIG_DIR: envConfigDir,
+        PWSAFE_DATA_DIR: envDataDir,
+        PWSAFE_STATIC_DIR: envStaticDir,
         PWSAFE_PORT: String(port),
       },
       stdio: ["ignore", "pipe", "pipe"],

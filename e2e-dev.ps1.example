@@ -1,15 +1,15 @@
 # PowerShell script for local e2e development
 $ErrorActionPreference = "Stop"
 
-# Configuration - Update these values for your local environment (paths should be relative to backend/)
-$CONFIG_DIR = "/some/folder/config" # Path to dev config directory (contains settings.json)
-$DATA_DIR = "/some/folder/data"     # Path to dev data directory (contains static/ and provider folders)
+# Configuration - Update these absolute paths for your local environment
+$CONFIG_DIR = "C:\some\folder\config" # Path to dev config directory (contains settings.json)
+$DATA_DIR = "C:\some\folder\data"     # Path to dev data directory (contains static/ and provider folders)
 
 # On first start, visit the UI in your browser to choose an auth mode.
 # To skip setup for dev, add "auth": { "mode": "disabled" } to your settings.json.
 
 # This value usually does not need to be changed
-$STATIC_DIR = "../frontend/dist"    # Path to frontend build output
+$STATIC_DIR = (Resolve-Path ".\frontend\dist").Path # Path to frontend build output
 
 Write-Host "Building frontend..."
 Push-Location frontend

@@ -84,6 +84,20 @@ func Load() *Config {
 	// Determine if running in Docker (all env vars set to Docker defaults)
 	isDocker := configDir == "/config" && dataDir == "/data"
 
+	var err error
+	configDir, err = filepath.Abs(configDir)
+	if err != nil {
+		log.Fatalf("Failed to resolve PWSAFE_CONFIG_DIR: %v", err)
+	}
+	dataDir, err = filepath.Abs(dataDir)
+	if err != nil {
+		log.Fatalf("Failed to resolve PWSAFE_DATA_DIR: %v", err)
+	}
+	staticDir, err = filepath.Abs(staticDir)
+	if err != nil {
+		log.Fatalf("Failed to resolve PWSAFE_STATIC_DIR: %v", err)
+	}
+
 	if serverPort == "" {
 		serverPort = "8080"
 	}

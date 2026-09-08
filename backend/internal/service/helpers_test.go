@@ -67,6 +67,29 @@ func TestValidatePathWithinBase_BaseWithTrailingSep(t *testing.T) {
 	}
 }
 
+func TestValidatePathWithinBase_RelativeExistingBase(t *testing.T) {
+	root := t.TempDir()
+	t.Chdir(root)
+
+	base := filepath.Join("data", "mock")
+	if err := os.MkdirAll(base, 0755); err != nil {
+		t.Fatalf("failed to create relative base: %v", err)
+	}
+	path := filepath.Join(base, "simple.psafe3")
+
+	got, err := validatePathWithinBase(path, base)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	expected, err := filepath.Abs(path)
+	if err != nil {
+		t.Fatalf("failed to resolve expected path: %v", err)
+	}
+	if got != expected {
+		t.Errorf("expected %q, got %q", expected, got)
+	}
+}
+
 func TestFormatUUID(t *testing.T) {
 	uuid := []byte{0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef, 0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef}
 	result := formatUUID(uuid)

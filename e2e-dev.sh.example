@@ -1,15 +1,15 @@
 #!/bin/bash
 set -e
 
-# Configuration - Update these values for your local environment (paths should be relative to backend/)
-CONFIG_DIR="./some/folder/config" # Path to config directory (contains settings.json)
-DATA_DIR="./some/folder/data"     # Path to data directory (contains static/ and provider folders)
+# Configuration - Update these absolute paths for your local environment
+CONFIG_DIR="/some/folder/config" # Path to config directory (contains settings.json)
+DATA_DIR="/some/folder/data"     # Path to data directory (contains static/ and provider folders)
 
 # On first start, visit the UI in your browser to choose an auth mode.
 # To skip setup for dev, add "auth": { "mode": "disabled" } to your settings.json.
 
 # This value usually does not need to be changed
-STATIC_DIR="../frontend/dist"     # Path to frontend build output
+STATIC_DIR="$(pwd)/frontend/dist" # Path to frontend build output
 
 echo "Building frontend..."
 cd frontend && npm run build
