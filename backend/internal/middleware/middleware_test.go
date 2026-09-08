@@ -156,8 +156,8 @@ func TestSecurityHeaders_SetsHeaders(t *testing.T) {
 
 	checks := map[string]string{
 		"X-Content-Type-Options": "nosniff",
-		"X-Frame-Options":       "DENY",
-		"Referrer-Policy":       "no-referrer",
+		"X-Frame-Options":        "DENY",
+		"Referrer-Policy":        "no-referrer",
 	}
 	for header, expected := range checks {
 		if got := rec.Header().Get(header); got != expected {
@@ -341,6 +341,16 @@ func TestRequireAuth_Enabled_ValidSession(t *testing.T) {
 	}
 	if rec.Code != http.StatusOK {
 		t.Errorf("expected 200, got %d", rec.Code)
+	}
+	refreshed := rec.Result().Cookies()
+	if len(refreshed) != 1 {
+		t.Fatalf("expected refreshed session cookie, got %d cookies", len(refreshed))
+	}
+	if refreshed[0].Name != "pwsafe_session_id" || refreshed[0].Value != sessionID {
+		t.Errorf("unexpected refreshed session cookie: %+v", refreshed[0])
+	}
+	if refreshed[0].MaxAge != int(svc.GetSessionTimeout().Seconds()) {
+		t.Errorf("expected MaxAge %d, got %d", int(svc.GetSessionTimeout().Seconds()), refreshed[0].MaxAge)
 	}
 }
 

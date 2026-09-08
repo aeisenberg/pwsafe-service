@@ -18,8 +18,8 @@ type Config struct {
 
 // AuthConfig holds authentication settings
 type AuthConfig struct {
-	Mode               string `json:"mode"`               // "disabled", "enabled", or "" (unset)
-	SessionTimeout     string `json:"sessionTimeout,omitempty"`     // duration string, default "3m"
+	Mode               string `json:"mode"`                         // "disabled", "enabled", or "" (unset)
+	SessionTimeout     string `json:"sessionTimeout,omitempty"`     // duration string, default "10m"
 	BcryptCost         int    `json:"bcryptCost,omitempty"`         // 4–31, default 10
 	MaxSessions        int    `json:"maxSessions,omitempty"`        // 1–10000, default 4
 	MaxSessionLifetime string `json:"maxSessionLifetime,omitempty"` // duration string, default "30m"

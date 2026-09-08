@@ -94,13 +94,7 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Determine if we should set Secure flag (check X-Forwarded-Proto only if trusted)
-	remoteIP := middleware.GetClientIP(r, nil) // raw remote IP for trust check
-	secure := r.TLS != nil
-	if !secure && middleware.IsTrustedProxy(remoteIP, h.trustedProxies) {
-		secure = r.Header.Get("X-Forwarded-Proto") == "https"
-	}
-	auth.SetSessionCookie(w, sessionID, secure, h.authService.GetSessionTimeout())
+	auth.SetSessionCookie(w, sessionID, middleware.IsHTTPSRequest(r, h.trustedProxies), h.authService.GetSessionTimeout())
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]string{"status": "ok"})

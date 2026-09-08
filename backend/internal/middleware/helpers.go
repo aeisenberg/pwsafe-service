@@ -25,6 +25,15 @@ func IsTrustedProxy(ip string, trustedProxies []string) bool {
 	return false
 }
 
+// IsHTTPSRequest reports whether the request used HTTPS directly or through a trusted proxy.
+func IsHTTPSRequest(r *http.Request, trustedProxies []string) bool {
+	if r.TLS != nil {
+		return true
+	}
+	return IsTrustedProxy(extractRemoteIP(r.RemoteAddr), trustedProxies) &&
+		r.Header.Get("X-Forwarded-Proto") == "https"
+}
+
 // GetClientIP extracts the client IP from a request.
 // Proxy headers (X-Real-IP, X-Forwarded-For) are only honoured when the
 // remote address is in the trustedProxies list. Otherwise the remote IP is

@@ -29,6 +29,7 @@ describe("Auth session expiry", { timeout: 30_000 }, () => {
     await api.login("testpass");
     const resp = await api.raw("GET", "/api/safes");
     expect(resp.status).toBe(200);
+    expect(resp.headers.get("set-cookie")).toContain("Max-Age=2");
   });
 
   it("after session timeout, access endpoint returns 401", async () => {

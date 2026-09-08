@@ -21,7 +21,7 @@ import (
 const (
 	defaultMaxSessions         = 4
 	defaultMaxAbsoluteLifetime = 30 * time.Minute
-	defaultSessionTimeout      = 3 * time.Minute
+	defaultSessionTimeout      = 10 * time.Minute
 	defaultBcryptCost          = 10 // bcrypt.DefaultCost
 	sessionCookieName          = "pwsafe_session_id"
 	passwordHashFile           = ".password_hash"

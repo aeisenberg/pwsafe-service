@@ -30,6 +30,7 @@ func RequireAuth(authService *auth.AuthService, trustedProxies []string, next ht
 				http.Error(w, "Unauthorized", http.StatusUnauthorized)
 				return
 			}
+			auth.SetSessionCookie(w, sessionID, IsHTTPSRequest(r, trustedProxies), authService.GetSessionTimeout())
 			next(w, r)
 		default:
 			http.Error(w, "Service not configured", http.StatusServiceUnavailable)

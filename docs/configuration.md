@@ -38,7 +38,7 @@ The `auth` block is added for you on first run through the web UI. If you'd like
 | Field | Type | Default | Valid Range | Description |
 |---|---|---|---|---|
 | `mode` | string | `""` (unset → setup prompt) | `"disabled"`, `"enabled"` | Auth mode. Set automatically during first-run setup. |
-| `sessionTimeout` | duration string | `"3m"` | Any valid Go duration | Inactivity timeout before a session expires. Capped at `maxSessionLifetime`. |
+| `sessionTimeout` | duration string | `"10m"` | Any valid Go duration | Inactivity timeout before a session expires. Capped at `maxSessionLifetime`. |
 | `bcryptCost` | integer | `10` | 4–14 | bcrypt hashing cost for password storage. Higher values are slower but more secure. |
 | `maxSessions` | integer | `4` | 1–10,000 | Maximum concurrent sessions. When exceeded, the oldest session is evicted. |
 | `maxSessionLifetime` | duration string | `"30m"` | ≥ `"1m"` | Absolute maximum lifetime of a session, regardless of activity. |

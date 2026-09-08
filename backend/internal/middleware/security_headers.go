@@ -14,14 +14,7 @@ func SecurityHeaders(hstsEnabled bool, trustedProxies []string, next http.Handle
 			w.Header().Set("Cache-Control", "no-store")
 		}
 		if hstsEnabled {
-			isHTTPS := r.TLS != nil
-			if !isHTTPS {
-				remoteIP := extractRemoteIP(r.RemoteAddr)
-				if IsTrustedProxy(remoteIP, trustedProxies) {
-					isHTTPS = r.Header.Get("X-Forwarded-Proto") == "https"
-				}
-			}
-			if isHTTPS {
+			if IsHTTPSRequest(r, trustedProxies) {
 				w.Header().Set("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
 			}
 		}
