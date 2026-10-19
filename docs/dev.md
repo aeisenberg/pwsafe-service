@@ -34,11 +34,9 @@ For detailed instructions on developing each component:
 
 ### Import Test Safes
 
-Use [import-test-safes.sh](../import-test-safes.sh) or [import-test-safes.ps1](../import-test-safes.ps1) to upload all `.psafe3` files from `backend/testdata/` to a running service.
-Both scripts overwrite files with the same name. Use them only with a development instance.
+Use [import-test-safes.sh](../import-test-safes.sh) or [import-test-safes.ps1](../import-test-safes.ps1) to upload all `.psafe3` files from `backend/testdata/` to a running service. Both scripts overwrite files with the same name. Use them only with a development instance.
 
-The Bash script requires Bash, curl, and jq. The PowerShell script requires PowerShell 7 or later, without external dependencies.
-Complete the initial service setup before use.
+The Bash script requires Bash, curl, and jq. The PowerShell script requires PowerShell 7 or later, without external dependencies. Complete the initial service setup before use.
 
 ```bash
 # Default service URL: http://localhost:8080
@@ -56,10 +54,7 @@ Complete the initial service setup before use.
 .\import-test-safes.ps1 https://localhost:8443
 ```
 
-If service authentication is enabled, both scripts prompt for the service password.
-Both obtain a CSRF token and stop at the first failed request.
-The Bash script removes its temporary session cookie file on exit.
-The PowerShell script keeps session cookies in memory.
+If service authentication is enabled, both scripts prompt for the service password. Both obtain a CSRF token and stop at the first failed request. The Bash script removes its temporary session cookie file on exit. The PowerShell script keeps session cookies in memory.
 
 ### Working with Providers
 
