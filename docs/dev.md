@@ -23,9 +23,7 @@ The easiest way to run the full stack locally is with the e2e dev scripts:
 ./e2e-dev.sh
 ```
 
-Copy the `.example` e2e dev scripts and configure as needed. These scripts build the backend and frontend, and then start the backend which serves the compiled frontend.
-
-**Note:** The scripts do not install dependencies. Run `go mod download` in `backend/` and `npm install` in `frontend/` first. 
+These scripts install dependencies, build the backend and frontend, and then start the backend, which serves the compiled frontend. Runtime configuration and data are stored under `runtime/`.
 
 ### Component-Specific Development
 
@@ -33,6 +31,30 @@ For detailed instructions on developing each component:
 
 - **Backend**: See [backend/README.md](../backend/README.md)
 - **Frontend**: See [frontend/README.md](../frontend/README.md)
+
+### Import Test Safes
+
+Use [import-test-safes.sh](../import-test-safes.sh) or [import-test-safes.ps1](../import-test-safes.ps1) to upload all `.psafe3` files from `backend/testdata/` to a running service. Both scripts overwrite files with the same name. Use them only with a development instance.
+
+The Bash script requires Bash, curl, and jq. The PowerShell script requires PowerShell 7 or later, without external dependencies. Complete the initial service setup before use.
+
+```bash
+# Default service URL: http://localhost:8080
+./import-test-safes.sh
+
+# Custom service URL
+./import-test-safes.sh https://localhost:8443
+```
+
+```powershell
+# Default service URL: http://localhost:8080
+.\import-test-safes.ps1
+
+# Custom service URL
+.\import-test-safes.ps1 https://localhost:8443
+```
+
+If service authentication is enabled, both scripts prompt for the service password. Both obtain a CSRF token and stop at the first failed request. The Bash script removes its temporary session cookie file on exit. The PowerShell script keeps session cookies in memory.
 
 ### Working with Providers
 
