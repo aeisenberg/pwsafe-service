@@ -4,5 +4,5 @@
 # Compiled binaries
 backend/pwsafe-service
 
-e2e-dev.sh
-e2e-dev.ps1
+# Holds runtime data
+runtime

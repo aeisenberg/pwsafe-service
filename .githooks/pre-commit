@@ -1,9 +1,13 @@
 #!/bin/sh
 
 # Get list of staged files before formatting
-STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACMR)
+STAGED_FILES=$(mktemp) || exit 1
+trap 'rm -f "$STAGED_FILES"' 0
 
-if [ -z "$STAGED_FILES" ]; then
+git diff --cached --name-only --diff-filter=ACMR -z \
+  > "$STAGED_FILES" || exit 1
+
+if [ ! -s "$STAGED_FILES" ]; then
   exit 0
 fi
 
@@ -16,4 +20,4 @@ cd e2e && npm run format:fix
 cd ..
 
 # Re-add only the files that were originally staged
-echo "$STAGED_FILES" | xargs -d '\n' git add
+xargs -0 git --literal-pathspecs add -- < "$STAGED_FILES"
