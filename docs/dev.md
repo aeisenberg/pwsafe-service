@@ -23,7 +23,7 @@ The easiest way to run the full stack locally is with the e2e dev scripts:
 ./e2e-dev.sh
 ```
 
-Copy the `.example` e2e dev scripts and configure as needed. These scripts build the backend and frontend, and then start the backend which serves the compiled frontend.
+These scripts install dependencies, build the backend and frontend, and then start the backend, which serves the compiled frontend. Runtime configuration and data are stored under `runtime/`.
 
 ### Component-Specific Development
 
